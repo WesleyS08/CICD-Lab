@@ -15,10 +15,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4  # Faz o checkout do código no repositório
-    - name: Setup JDK 11  # Configura o JDK 11 para o Android
+    - name: Setup JDK 17  # Configura o JDK 11 para o Android
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
         cache: gradle
     
