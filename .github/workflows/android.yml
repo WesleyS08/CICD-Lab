@@ -1,6 +1,5 @@
 name: Android CI
 
-# Evento que dispara o workflow
 on:
   push:
     branches: ["main"]
@@ -8,14 +7,13 @@ on:
     branches: ["main"]
   workflow_dispatch:  # Para permitir execução manual
 
-# Configuração do job
 jobs:
   build:
     runs-on: ubuntu-latest  # Ambiente do runner
     
     steps:
     - uses: actions/checkout@v4  # Faz o checkout do código no repositório
-    - name: Setup JDK 17  # Configura o JDK 11 para o Android
+    - name: Setup JDK 17  # Configura o JDK 17 para o Android
       uses: actions/setup-java@v3
       with:
         java-version: '17'
@@ -27,3 +25,19 @@ jobs:
 
     - name: Build with Gradle  # Executa a build do projeto Android
       run: ./gradlew build
+    
+  test:
+    needs: build  # O job "test" espera o job "build"
+    runs-on: ubuntu-latest  # Ambiente do runner
+    
+    steps:
+    - uses: actions/checkout@v4  # Faz o checkout do código no repositório
+    - name: Setup JDK 17  # Configura o JDK 17 para o Android
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: Run Unit Tests  # Executa testes unitários
+      run: ./gradlew test
