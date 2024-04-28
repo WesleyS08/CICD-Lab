@@ -1,0 +1,29 @@
+name: Android CI
+
+# Evento que dispara o workflow
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:  # Para permitir execução manual
+
+# Configuração do job
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Ambiente do runner
+    
+    steps:
+    - uses: actions/checkout@v4  # Faz o checkout do código no repositório
+    - name: Setup JDK 11  # Configura o JDK 11 para o Android
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: Grant execute permission for gradlew  # Dá permissão de execução ao Gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle  # Executa a build do projeto Android
+      run: ./gradlew build
